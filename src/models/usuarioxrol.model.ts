@@ -1,8 +1,25 @@
-import {Entity, model, property, belongsTo} from '@loopback/repository';
-import {Usuario} from './usuario.model';
+import {belongsTo, Entity, model, property} from '@loopback/repository';
 import {Rol} from './rol.model';
+import {Usuario} from './usuario.model';
 
-@model()
+@model({
+  settings: {
+    foreignKeys: {
+      usuario_fk: {
+        name: 'fk_usuario',
+        entity: 'Usuario',
+        entityKey: 'id',
+        foreignKey: 'id_usuario'
+      },
+      rol_fk: {
+        name: 'fk_rol_',
+        entity: 'Rol',
+        entityKey: 'id',
+        foreignKey: 'id_rol'
+      }
+    }
+  }
+})
 export class Usuarioxrol extends Entity {
   @property({
     type: 'number',
