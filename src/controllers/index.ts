@@ -7,3 +7,8 @@ export * from './rol-rolxpermisos.controller';
 export * from './rolxpermisos-rol.controller';
 export * from './permisos-rolxpermisos.controller';
 export * from './rolxpermisos-permisos.controller';
+export * from './rol.controller';
+export * from './usuario.controller';
+export * from './permisos.controller';
+export * from './usuarioxrol.controller';
+export * from './rolxpermisos.controller';
