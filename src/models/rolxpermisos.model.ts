@@ -1,8 +1,25 @@
-import {Entity, model, property, belongsTo} from '@loopback/repository';
-import {Rol} from './rol.model';
+import {belongsTo, Entity, model, property} from '@loopback/repository';
 import {Permisos} from './permisos.model';
+import {Rol} from './rol.model';
 
-@model()
+@model({
+  settings: {
+    foreignKeys: {
+      fk_rol: {
+        name: 'fk_rol',
+        entity: 'Rol',
+        entityKey: 'id',
+        foreignKey: 'id_rol'
+      },
+      fk_permisos: {
+        name: 'fk_permisos',
+        entity: 'Permisos',
+        entityKey: 'id',
+        foreignKey: 'id_permiso'
+      }
+    }
+  }
+})
 export class Rolxpermisos extends Entity {
   @property({
     type: 'number',
