@@ -4,18 +4,12 @@ import {
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
-  post,
-  param,
-  get,
-  getModelSchemaRef,
-  patch,
-  put,
-  del,
-  requestBody,
-  response,
+  del, get,
+  getModelSchemaRef, param, patch, post, put, requestBody,
+  response
 } from '@loopback/rest';
 import {Usuario} from '../models';
 import {UsuarioRepository} from '../repositories';
@@ -23,8 +17,8 @@ import {UsuarioRepository} from '../repositories';
 export class UsuarioController {
   constructor(
     @repository(UsuarioRepository)
-    public usuarioRepository : UsuarioRepository,
-  ) {}
+    public usuarioRepository: UsuarioRepository,
+  ) { }
 
   @post('/usuarios')
   @response(200, {
@@ -44,6 +38,10 @@ export class UsuarioController {
     })
     usuario: Omit<Usuario, 'id'>,
   ): Promise<Usuario> {
+    let clave = "";
+    // Enviar clave por correo electronico
+    let claveCifrada = "MD5";
+    usuario.contrasenia = claveCifrada;
     return this.usuarioRepository.create(usuario);
   }
 
