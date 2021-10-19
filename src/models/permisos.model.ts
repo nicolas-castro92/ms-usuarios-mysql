@@ -1,4 +1,5 @@
-import {Entity, model, property} from '@loopback/repository';
+import {Entity, model, property, hasMany} from '@loopback/repository';
+import {Rolxpermisos} from './rolxpermisos.model';
 
 @model()
 export class Permisos extends Entity {
@@ -15,6 +16,8 @@ export class Permisos extends Entity {
   })
   nombre: string;
 
+  @hasMany(() => Rolxpermisos, {keyTo: 'id_permiso'})
+  tiene_muchos: Rolxpermisos[];
 
   constructor(data?: Partial<Permisos>) {
     super(data);
