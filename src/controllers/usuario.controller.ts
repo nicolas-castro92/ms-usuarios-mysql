@@ -155,4 +155,40 @@ export class UsuarioController {
   async deleteById(@param.path.number('id') id: number): Promise<void> {
     await this.usuarioRepository.deleteById(id);
   }
+
+  /**
+   * Metodos adicionales a los generados por loopback
+   */
+
+   @post('/identificar-usuario')
+   @response(200, {
+     description: 'Identificacion de usuarios',
+     content: {'application/json': {schema: getModelSchemaRef(Usuario)}},
+   })
+   async identificarUsuario(
+     @requestBody({
+       content: {
+         'application/json': {
+           schema: getModelSchemaRef(Usuario, {
+             title: 'NewUsuario',
+             exclude: ['id'],
+           }),
+         },
+       },
+     })
+     usuario: Omit<Usuario, 'id'>,
+   ): Promise<Usuario> {
+     let clave = this.adminDeClavesService.crearClaveAleatoria();
+     console.log(clave);
+     // Enviar clave por correo electronico
+     let claveCifrada = this.adminDeClavesService.cifrarTexto(clave);
+     console.log(claveCifrada);
+     usuario.contrasenia = claveCifrada;
+     let usuarioCreado = await this.usuarioRepository.create(usuario);
+     if (usuarioCreado) {
+       // enviar clave por correo electronico
+     }
+     return usuarioCreado;
+   }
+
 }
