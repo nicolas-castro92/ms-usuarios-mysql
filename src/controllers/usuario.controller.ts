@@ -58,7 +58,7 @@ export class UsuarioController {
       // enviar clave por correo electronico
       let datos = new NotificacionCorreo();
       datos.destino = usuarioCreado.correo;
-      datos.asunto = Configuracion.asuntoUsuarioCreado
+      datos.asunto = Configuracion.asuntoUsuarioCreado;
       datos.mensaje = `${Configuracion.saludo}
                        ${usuarioCreado.nombre} <br>
                        ${Configuracion.mensajeUsuarioCreado}
