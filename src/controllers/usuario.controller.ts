@@ -56,6 +56,15 @@ export class UsuarioController {
     let usuarioCreado = await this.usuarioRepository.create(usuario);
     if (usuarioCreado) {
       // enviar clave por correo electronico
+      let datos = new NotificacionCorreo();
+      datos.destino = usuarioCreado.correo;
+      datos.asunto = Configuracion.asuntoUsuarioCreado
+      datos.mensaje = `${Configuracion.saludo}
+                       ${usuarioCreado.nombre} <br>
+                       ${Configuracion.mensajeUsuarioCreado}
+                       ${Configuracion.mensajeUsuarioCreadoClave}
+                       ${clave}`
+      this.notiService.enviarCorreo(datos);
     }
     return usuarioCreado;
   }

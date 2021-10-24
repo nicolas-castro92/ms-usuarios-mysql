@@ -12,10 +12,10 @@ export class NotificacionesService {
 
   enviarCorreo(datos: NotificacionCorreo) {
     let urlCorreo = `${Configuracion.urlCorreo}
-                    ?destino=${datos.destino}
-                    &asunto${datos.asunto}
-                    &mensaje${datos.mensaje}
-                    &hash${Configuracion.hashNotificacion}`;
+                    ?${Configuracion.destinoArg}=${datos.destino}
+                    &${Configuracion.asuntoArg}=${datos.asunto}
+                    &${Configuracion.mensajeArg}=${datos.mensaje}
+                    &${Configuracion.hashArg}=${Configuracion.hashNotificacion}`;
     fetch(urlCorreo)
       .then((resp: any) => {
         console.log(resp.text());
