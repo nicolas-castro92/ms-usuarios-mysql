@@ -12,9 +12,12 @@ import {
   getModelSchemaRef, param, patch, post, put, requestBody,
   response
 } from '@loopback/rest';
+import {Configuracion} from '../keys/configuracion';
 import {CambioClave, Credenciales, Usuario} from '../models';
+import {NotificacionCorreo} from '../models/notificacion-correo.model';
 import {UsuarioRepository} from '../repositories';
 import {AdmiDeClavesService} from '../services';
+import {NotificacionesService} from '../services/notificaciones.service';
 
 export class UsuarioController {
   constructor(
@@ -22,6 +25,8 @@ export class UsuarioController {
     public usuarioRepository: UsuarioRepository,
     @service(AdmiDeClavesService)
     public adminDeClavesService: AdmiDeClavesService,
+    @service(NotificacionesService)
+    public notiService: NotificacionesService
   ) { }
 
   @post('/usuarios')
@@ -54,6 +59,95 @@ export class UsuarioController {
     }
     return usuarioCreado;
   }
+
+  /**
+   * Metodos adicionales a los generados por loopback
+   */
+
+  @post('/identificar-usuario')
+  @response(200, {
+    description: 'Identificacion de usuarios',
+    content: {'application/json': {schema: getModelSchemaRef(Credenciales)}},
+  })
+  async identificarUsuario(
+    @requestBody({
+      content: {
+        'application/json': {
+          schema: getModelSchemaRef(Credenciales, {
+            title: 'Identificar usuario'
+          }),
+        },
+      },
+    })
+    credenciales: Credenciales,
+  ): Promise<object | null> {
+    let usuario = await this.usuarioRepository.findOne({
+      where: {
+        correo: credenciales.usuario,
+        contrasenia: credenciales.clave
+      }
+    });
+    if (usuario) {
+      //generar token y agregarlo a la respuesta
+    }
+    return usuario;
+  }
+
+  @post('/cambiar-clave')
+  @response(200, {
+    description: 'cambio de clave usuarios',
+    content: {'application/json': {schema: getModelSchemaRef(CambioClave)}},
+  })
+  async cambiarClave(
+    @requestBody({
+      content: {
+        'application/json': {
+          schema: getModelSchemaRef(CambioClave, {
+            title: 'Cambio de clave del usuario'
+          }),
+        },
+      },
+    })
+    credencialesClave: CambioClave,
+  ): Promise<boolean | null> {
+    let usuario = await this.adminDeClavesService.cambiarClave(credencialesClave);
+    if (usuario) {
+      //invocar al servicio de notificaciones para enviar correo al user
+      let datos = new NotificacionCorreo();
+      datos.destino = usuario.correo;
+      datos.asunto = Configuracion.asuntoClave;
+      datos.mensaje = `${Configuracion.saludo} ${usuario.nombre} <br> ${Configuracion.mensajeCambioClave} `
+      this.notiService.enviarCorreo(datos);
+    }
+    return usuario != null;
+  }
+
+
+  @post('/recuperar-clave')
+  @response(200, {
+    description: 'cambio de clave usuarios',
+    content: {'application/json': {schema: {}}},
+  })
+  async recuperarClave(
+    @requestBody({
+      content: {
+        'application/json': {
+          schema: {},
+        },
+      },
+    })
+    correo: string,
+  ): Promise<Usuario | null> {
+    let usuario = await this.adminDeClavesService.recuperarClave(correo);
+    if (usuario) {
+      //invocar al servicio de notificaciones para enviar correo al user con la nueva clave
+    }
+    return usuario;
+  }
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
   @get('/usuarios/count')
   @response(200, {
@@ -156,85 +250,6 @@ export class UsuarioController {
     await this.usuarioRepository.deleteById(id);
   }
 
-  /**
-   * Metodos adicionales a los generados por loopback
-   */
-
-  @post('/identificar-usuario')
-  @response(200, {
-    description: 'Identificacion de usuarios',
-    content: {'application/json': {schema: getModelSchemaRef(Credenciales)}},
-  })
-  async identificarUsuario(
-    @requestBody({
-      content: {
-        'application/json': {
-          schema: getModelSchemaRef(Credenciales, {
-            title: 'Identificar usuario'
-          }),
-        },
-      },
-    })
-    credenciales: Credenciales,
-  ): Promise<object | null> {
-    let usuario = await this.usuarioRepository.findOne({
-      where: {
-        correo: credenciales.usuario,
-        contrasenia: credenciales.clave
-      }
-    });
-    if (usuario) {
-      //generar token y agregarlo a la respuesta
-    }
-    return usuario;
-  }
-
-  @post('/cambiar-clave')
-  @response(200, {
-    description: 'cambio de clave usuarios',
-    content: {'application/json': {schema: getModelSchemaRef(CambioClave)}},
-  })
-  async cambiarClave(
-    @requestBody({
-      content: {
-        'application/json': {
-          schema: getModelSchemaRef(CambioClave, {
-            title: 'Cambio de clave del usuario'
-          }),
-        },
-      },
-    })
-    credencialesClave: CambioClave,
-  ): Promise<boolean | null> {
-    let respuesta = await this.adminDeClavesService.cambiarClave(credencialesClave);
-    if (respuesta) {
-      //invocar al servicio de notificaciones para enviar correo al user
-    }
-    return respuesta;
-  }
-
-
-  @post('/recuperar-clave')
-  @response(200, {
-    description: 'cambio de clave usuarios',
-    content: {'application/json': {schema: {}}},
-  })
-  async recuperarClave(
-    @requestBody({
-      content: {
-        'application/json': {
-          schema: {},
-        },
-      },
-    })
-    correo: string,
-  ): Promise<Usuario | null> {
-    let usuario = await this.adminDeClavesService.recuperarClave(correo);
-    if (usuario) {
-      //invocar al servicio de notificaciones para enviar correo al user con la nueva clave
-    }
-    return usuario;
-  }
 
 
 }

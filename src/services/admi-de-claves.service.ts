@@ -42,9 +42,9 @@ export class AdmiDeClavesService {
     if (usuario) {
       usuario.contrasenia = credencialesClave.clave_nueva;
       await this.usuarioRepository.updateById(credencialesClave.id_usuario, usuario);
-      return true;
+      return usuario;
     } else {
-      return false;
+      return null;
     }
   }
 
