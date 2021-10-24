@@ -10,8 +10,19 @@ export class NotificacionesService {
   /*
    * Add service methods here
    */
+  enviarCorreo(datos: NotificacionCorreo) {
+    let urlCorreo = `${Configuracion.urlCorreo}?${Configuracion.hashArg}=${Configuracion.hashNotificacion}&${Configuracion.destinoArg}=${datos.destino}&${Configuracion.asuntoArg}=${datos.asunto}&${Configuracion.mensajeArg}=${datos.mensaje}`;
+    console.log(`${Configuracion.urlCorreo}`);
+    console.log(`${Configuracion.hashArg}`);
+    console.log(`${Configuracion.hashNotificacion}`);
+    fetch(urlCorreo)
+      .then((resp: any) => {
+        console.log(resp.text());
+        //return resp.text() == Configuracion.respuesta;
+      })
+  }
 
-  async enviarCorreo(datos: NotificacionCorreo) {
+  /* async enviarCorreo(datos: NotificacionCorreo) {
     let urlCorreo = `${Configuracion.urlCorreo}
                     ?${Configuracion.destinoArg}=${datos.destino}
                     &${Configuracion.asuntoArg}=${datos.asunto}
@@ -22,5 +33,5 @@ export class NotificacionesService {
         console.log(resp.text());
         //return resp.text() == Configuracion.respuesta;
       })
-  }
+  } */
 }

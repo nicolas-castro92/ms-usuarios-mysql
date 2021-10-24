@@ -2,7 +2,7 @@
 export namespace Configuracion {
 
   //url
-  export const urlCorreo = "http://127.0.0.1:5000/correo"
+  export const urlCorreo = "http://localhost:5000/correo"
 
   //hash
   export const hashNotificacion = "123"
