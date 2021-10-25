@@ -14,6 +14,7 @@ import {
 } from '@loopback/rest';
 import {Configuracion} from '../keys/configuracion';
 import {CambioClave, Credenciales, Usuario} from '../models';
+import {CredencialesRecuperarClave} from '../models/credenciales-recuperar-clave.model';
 import {NotificacionCorreo} from '../models/notificacion-correo.model';
 import {UsuarioRepository} from '../repositories';
 import {AdmiDeClavesService} from '../services';
@@ -28,6 +29,9 @@ export class UsuarioController {
     @service(NotificacionesService)
     public notiService: NotificacionesService
   ) { }
+
+  ////////////// CREAR USUARIO ///////////////////////////////////////////
+
 
   @post('/usuarios')
   @response(200, {
@@ -145,11 +149,12 @@ export class UsuarioController {
         },
       },
     })
-    correo: string,
+    credenciales: CredencialesRecuperarClave,
   ): Promise<Usuario | null> {
-    let usuario = await this.adminDeClavesService.recuperarClave(correo);
+    let usuario = await this.adminDeClavesService.recuperarClave(credenciales);
     if (usuario) {
-      //invocar al servicio de notificaciones para enviar correo al user con la nueva clave
+      //invocar al servicio de notificaciones para enviar sms al user con la nueva clave
+      
     }
     return usuario;
   }

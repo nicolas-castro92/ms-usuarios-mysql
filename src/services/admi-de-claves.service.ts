@@ -1,6 +1,7 @@
 import { /* inject, */ BindingScope, injectable} from '@loopback/core';
 import {repository} from '@loopback/repository';
 import {CambioClave} from '../models/cambio-clave.model';
+import {CredencialesRecuperarClave} from '../models/credenciales-recuperar-clave.model';
 import {UsuarioRepository} from '../repositories/usuario.repository';
 const generator = require('generate-password');
 const cryptoJS = require("crypto-js");
@@ -15,10 +16,10 @@ export class AdmiDeClavesService {
   /*
    * Add service methods here
    */
-  async recuperarClave(correo: string) {
+  async recuperarClave(credenciales: CredencialesRecuperarClave) {
     let usuario = await this.usuarioRepository.findOne({
       where: {
-        correo: correo
+        correo: credenciales.correo
       }
     });
     if (usuario) {
