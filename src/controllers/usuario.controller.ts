@@ -52,10 +52,10 @@ export class UsuarioController {
     usuario: Omit<Usuario, 'id'>,
   ): Promise<Usuario> {
     let clave = this.adminDeClavesService.crearClaveAleatoria();
-    console.log(clave);
+    //console.log(clave);
     // Enviar clave por correo electronico
     let claveCifrada = this.adminDeClavesService.cifrarTexto(clave);
-    console.log(claveCifrada);
+    //console.log(claveCifrada);
     usuario.contrasenia = claveCifrada;
     let usuarioCreado = await this.usuarioRepository.create(usuario);
     if (usuarioCreado) {
@@ -150,11 +150,11 @@ export class UsuarioController {
       },
     })
     credenciales: CredencialesRecuperarClave,
-  ): Promise<Usuario | null> {
+  ): Promise<Usuario | null | string> {
     let usuario = await this.adminDeClavesService.recuperarClave(credenciales);
     if (usuario) {
       //invocar al servicio de notificaciones para enviar sms al user con la nueva clave
-      
+      return usuario;
     }
     return usuario;
   }

@@ -1,8 +1,11 @@
-import { /* inject, */ BindingScope, injectable} from '@loopback/core';
+import { /* inject, */ BindingScope, injectable, service} from '@loopback/core';
 import {repository} from '@loopback/repository';
+import {Configuracion} from '../keys/configuracion';
 import {CambioClave} from '../models/cambio-clave.model';
 import {CredencialesRecuperarClave} from '../models/credenciales-recuperar-clave.model';
+import {NotificacionSms} from '../models/notificacion-sms.model';
 import {UsuarioRepository} from '../repositories/usuario.repository';
+import {NotificacionesService} from './notificaciones.service';
 const generator = require('generate-password');
 const cryptoJS = require("crypto-js");
 
@@ -10,7 +13,9 @@ const cryptoJS = require("crypto-js");
 export class AdmiDeClavesService {
   constructor(
     @repository(UsuarioRepository)
-    public usuarioRepository: UsuarioRepository
+    public usuarioRepository: UsuarioRepository,
+    @service(NotificacionesService)
+    public notiService: NotificacionesService
   ) { }
 
   /*
@@ -24,9 +29,14 @@ export class AdmiDeClavesService {
     });
     if (usuario) {
       let claveRecuperada = this.crearClaveAleatoria();
+      console.log(claveRecuperada);
       usuario.contrasenia = this.cifrarTexto(claveRecuperada);
       await this.usuarioRepository.updateById(usuario.id, usuario);
       //notificar la nueva contraseña por correo;
+      let datos = new NotificacionSms();
+      datos.destino = usuario.celular;
+      datos.mensaje = `${Configuracion.saludo} ${usuario.nombre} <br> ${Configuracion.asuntoClave} ${Configuracion.mensajeRecuperarClave} ${claveRecuperada} `
+      this.notiService.NotificacionSms(datos);
       return usuario
     } else {
       return null;

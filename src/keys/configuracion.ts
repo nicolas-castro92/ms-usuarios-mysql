@@ -3,6 +3,7 @@ export namespace Configuracion {
 
   //url
   export const urlCorreo = "http://localhost:5000/correo"
+  export const urlSms = "http://localhost:5000/sms"
 
   //hash
   export const hashNotificacion = "123"
@@ -16,6 +17,7 @@ export namespace Configuracion {
   //cambiarClave
   export const mensajeCambioClave = "Su contraseña ha sido actualizada correctamente, si no fue usted cambiela :v"
   export const asuntoClave = "cambio de contraseña"
+  export const mensajeRecuperarClave = "Su nueva contraseña es: "
 
   //body
   export const saludo = "Hola";
