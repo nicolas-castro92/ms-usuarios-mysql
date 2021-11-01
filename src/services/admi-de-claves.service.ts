@@ -29,13 +29,13 @@ export class AdmiDeClavesService {
     });
     if (usuario) {
       let claveRecuperada = this.crearClaveAleatoria();
-      console.log(claveRecuperada);
+      //console.log(claveRecuperada);
       usuario.contrasenia = this.cifrarTexto(claveRecuperada);
       await this.usuarioRepository.updateById(usuario.id, usuario);
       //notificar la nueva contraseña por correo;
       let datos = new NotificacionSms();
       datos.destino = usuario.celular;
-      datos.mensaje = `${Configuracion.saludo} ${usuario.nombre} <br> ${Configuracion.asuntoClave} ${Configuracion.mensajeRecuperarClave} ${claveRecuperada} `
+      datos.mensaje = `${Configuracion.saludo} ${usuario.nombre} ${Configuracion.mensajeRecuperarClave} ${claveRecuperada} `
       this.notiService.NotificacionSms(datos);
       return usuario
     } else {

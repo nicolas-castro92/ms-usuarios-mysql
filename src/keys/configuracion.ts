@@ -10,13 +10,13 @@ export namespace Configuracion {
   export const respuesta = "el mensaje fue enviado correctamente"
 
   //usuario
-  export const mensajeUsuarioCreado = "welcome my comrade registro en la plataforma"
+  export const mensajeUsuarioCreado = "Bienvenido! su registro en la plataforma ha sido exitoso"
   export const mensajeUsuarioCreadoClave = "su clave es: "
-  export const asuntoUsuarioCreado = "Bienvenido"
+  export const asuntoUsuarioCreado = "Bienvenido a la plataforma trabajos academicos"
 
   //cambiarClave
   export const mensajeCambioClave = "Su contraseña ha sido actualizada correctamente, si no fue usted cambiela :v"
-  export const asuntoClave = "cambio de contraseña"
+  export const asuntoClave = "Cambio de contraseña"
   export const mensajeRecuperarClave = "Su nueva contraseña es: "
 
   //body

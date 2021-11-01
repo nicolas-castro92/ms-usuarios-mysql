@@ -50,7 +50,7 @@ export class UsuarioController {
       },
     })
     usuario: Omit<Usuario, 'id'>,
-  ): Promise<Usuario> {
+  ): Promise<Usuario | boolean> {
     let clave = this.adminDeClavesService.crearClaveAleatoria();
     //console.log(clave);
     // Enviar clave por correo electronico
@@ -64,11 +64,12 @@ export class UsuarioController {
       datos.destino = usuarioCreado.correo;
       datos.asunto = Configuracion.asuntoUsuarioCreado;
       datos.mensaje = `${Configuracion.saludo}
-                       ${usuarioCreado.nombre} <br>
+                       ${usuarioCreado.nombre}<br>
                        ${Configuracion.mensajeUsuarioCreado}
                        ${Configuracion.mensajeUsuarioCreadoClave}
                        ${clave}`
       this.notiService.enviarCorreo(datos);
+      return true
     }
     return usuarioCreado;
   }
@@ -129,7 +130,7 @@ export class UsuarioController {
       let datos = new NotificacionCorreo();
       datos.destino = usuario.correo;
       datos.asunto = Configuracion.asuntoClave;
-      datos.mensaje = `${Configuracion.saludo} ${usuario.nombre} <br> ${Configuracion.mensajeCambioClave} `
+      datos.mensaje = `${Configuracion.saludo} ${usuario.nombre} <br> ${Configuracion.mensajeCambioClave}`
       this.notiService.enviarCorreo(datos);
     }
     return usuario != null;
@@ -150,11 +151,11 @@ export class UsuarioController {
       },
     })
     credenciales: CredencialesRecuperarClave,
-  ): Promise<Usuario | null | string> {
+  ): Promise<Usuario | null | boolean> {
     let usuario = await this.adminDeClavesService.recuperarClave(credenciales);
     if (usuario) {
       //invocar al servicio de notificaciones para enviar sms al user con la nueva clave
-      return usuario;
+      return true;
     }
     return usuario;
   }
