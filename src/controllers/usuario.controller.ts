@@ -17,6 +17,7 @@ import {CambioClave, Credenciales, Usuario} from '../models';
 import {CredencialesRecuperarClave} from '../models/credenciales-recuperar-clave.model';
 import {NotificacionCorreo} from '../models/notificacion-correo.model';
 import {UsuarioRepository} from '../repositories';
+import {UsuarioxrolRepository} from '../repositories/usuarioxrol.repository';
 import {AdmiDeClavesService} from '../services';
 import {NotificacionesService} from '../services/notificaciones.service';
 import {UsuariosService} from '../services/usuarios.service';
@@ -31,7 +32,8 @@ export class UsuarioController {
     public notiService: NotificacionesService,
     @service(UsuariosService)
     public userService: UsuariosService,
-
+    @repository(UsuarioxrolRepository)
+    public userxRolRepository: UsuarioxrolRepository,
 
   ) { }
 
@@ -111,7 +113,15 @@ export class UsuarioController {
     let usuario = await this.userService.validarCredenciales(credenciales)
     if (usuario) {
       //generar token y agregarlo a la respuesta
-      return usuario;
+      let usuarioxrol = await this.userxRolRepository.findOne({
+        where: {
+          id_usuario: usuario.id
+        }
+      });
+      if (usuarioxrol) {
+        usuario.contrasenia = "";
+        return {usuarioxrol, usuario};
+      }
     }
     return usuario;
   }
