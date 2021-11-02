@@ -1,5 +1,6 @@
 import { /* inject, */ BindingScope, injectable} from '@loopback/core';
 import {repository} from '@loopback/repository';
+import {Credenciales} from '../models/credenciales.model';
 import {UsuarioRepository} from '../repositories/usuario.repository';
 const fetch = require('node-fetch');
 
@@ -15,9 +16,15 @@ export class UsuariosService {
    */
 
 
-  /* async validarCredenciales(credenciales: Credenciales) {
-
-  } */
+  async validarCredenciales(credenciales: Credenciales) {
+    let usuario = await this.UsuarioRepository.findOne({
+      where: {
+        correo: credenciales.usuario,
+        contrasenia: credenciales.clave
+      }
+    });
+    return usuario;
+  }
 
 
   /* async crearToken(datosUser: Usuario) {

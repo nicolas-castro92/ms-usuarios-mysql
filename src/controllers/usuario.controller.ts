@@ -19,6 +19,7 @@ import {NotificacionCorreo} from '../models/notificacion-correo.model';
 import {UsuarioRepository} from '../repositories';
 import {AdmiDeClavesService} from '../services';
 import {NotificacionesService} from '../services/notificaciones.service';
+import {UsuariosService} from '../services/usuarios.service';
 
 export class UsuarioController {
   constructor(
@@ -27,7 +28,11 @@ export class UsuarioController {
     @service(AdmiDeClavesService)
     public adminDeClavesService: AdmiDeClavesService,
     @service(NotificacionesService)
-    public notiService: NotificacionesService
+    public notiService: NotificacionesService,
+    @service(UsuariosService)
+    public userService: UsuariosService,
+
+
   ) { }
 
   ////////////// CREAR USUARIO ///////////////////////////////////////////
@@ -103,14 +108,10 @@ export class UsuarioController {
     })
     credenciales: Credenciales,
   ): Promise<object | null> {
-    let usuario = await this.usuarioRepository.findOne({
-      where: {
-        correo: credenciales.usuario,
-        contrasenia: credenciales.clave
-      }
-    });
+    let usuario = await this.userService.validarCredenciales(credenciales)
     if (usuario) {
       //generar token y agregarlo a la respuesta
+      return usuario;
     }
     return usuario;
   }
