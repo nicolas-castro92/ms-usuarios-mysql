@@ -50,28 +50,36 @@ export class UsuarioController {
       },
     })
     usuario: Omit<Usuario, 'id'>,
-  ): Promise<Usuario | boolean> {
+  ): Promise<Usuario | boolean | string> {
     let clave = this.adminDeClavesService.crearClaveAleatoria();
     //console.log(clave);
     // Enviar clave por correo electronico
     let claveCifrada = this.adminDeClavesService.cifrarTexto(clave);
     //console.log(claveCifrada);
     usuario.contrasenia = claveCifrada;
-    let usuarioCreado = await this.usuarioRepository.create(usuario);
-    if (usuarioCreado) {
-      // enviar clave por correo electronico
-      let datos = new NotificacionCorreo();
-      datos.destino = usuarioCreado.correo;
-      datos.asunto = Configuracion.asuntoUsuarioCreado;
-      datos.mensaje = `${Configuracion.saludo}
+    let usuarioVerificado = await this.usuarioRepository.findOne({
+      where: {
+        correo: usuario.correo
+      }
+    })
+    if (!usuarioVerificado) {
+      let usuarioCreado = await this.usuarioRepository.create(usuario);
+      if (usuarioCreado) {
+        // enviar clave por correo electronico
+        let datos = new NotificacionCorreo();
+        datos.destino = usuarioCreado.correo;
+        datos.asunto = Configuracion.asuntoUsuarioCreado;
+        datos.mensaje = `${Configuracion.saludo}
                        ${usuarioCreado.nombre}<br>
                        ${Configuracion.mensajeUsuarioCreado}
                        ${Configuracion.mensajeUsuarioCreadoClave}
                        ${clave}`
-      this.notiService.enviarCorreo(datos);
-      return true
+        this.notiService.enviarCorreo(datos);
+        return true
+      }
+      return usuarioCreado;
     }
-    return usuarioCreado;
+    return "el correo ya existe";
   }
 
   /**
