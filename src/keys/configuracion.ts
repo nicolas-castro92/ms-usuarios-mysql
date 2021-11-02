@@ -4,6 +4,7 @@ export namespace Configuracion {
   //url
   export const urlCorreo = "http://localhost:5000/correo"
   export const urlSms = "http://localhost:5000/sms"
+  export const urlCrearToken = "http://localhost:5001/crear-token"
 
   //hash
   export const hashNotificacion = "123"
@@ -25,6 +26,9 @@ export namespace Configuracion {
   export const asuntoArg = "asunto";
   export const mensajeArg = "mensaje";
   export const hashArg = "hash";
+  export const nombreArg = "nombre";
+  export const idUserArg = "id_usuario";
+  export const idRolArg = "id_rol"
 
 
 

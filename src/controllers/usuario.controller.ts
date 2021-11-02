@@ -111,6 +111,7 @@ export class UsuarioController {
     credenciales: Credenciales,
   ): Promise<object | null> {
     let usuario = await this.userService.validarCredenciales(credenciales)
+    let tk = "";
     if (usuario) {
       //generar token y agregarlo a la respuesta
       let usuarioxrol = await this.userxRolRepository.findOne({
@@ -118,12 +119,15 @@ export class UsuarioController {
           id_usuario: usuario.id
         }
       });
+
       if (usuarioxrol) {
-        usuario.contrasenia = "";
-        return {usuarioxrol, usuario};
+        //usuario.contrasenia = "";
+        tk = await this.userService.crearToken(usuario, usuarioxrol);
+        //console.log('aqui viene un token', tk);
       }
     }
-    return usuario;
+    //console.log('que veo', tk);
+    return {usuario, tk};
   }
 
   @post('/cambiar-clave')

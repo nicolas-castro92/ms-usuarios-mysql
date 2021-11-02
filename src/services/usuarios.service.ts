@@ -1,6 +1,9 @@
 import { /* inject, */ BindingScope, injectable} from '@loopback/core';
 import {repository} from '@loopback/repository';
+import {Configuracion} from '../keys/configuracion';
 import {Credenciales} from '../models/credenciales.model';
+import {Usuario} from '../models/usuario.model';
+import {Usuarioxrol} from '../models/usuarioxrol.model';
 import {UsuarioRepository} from '../repositories/usuario.repository';
 const fetch = require('node-fetch');
 
@@ -27,16 +30,17 @@ export class UsuariosService {
   }
 
 
-  /* async crearToken(datosUser: Usuario) {
-    let urlToken = `${Configuracion.urlCrearToken}?${Configuracion.nombreArg}=${datosUser.nombre}&${Configuracion.idUserArg}=${datosUser.id}&${Configuracion.idRolArg}=${datosUser.tiene_muchos[1]}`
-    let token = "";
-    fetch(urlToken)
-      .then((resp: any) => {
-        token = resp.text();
-        console.log(token);
+  async crearToken(datosUser: Usuario, datosUserxRol: Usuarioxrol): Promise<string> {
+    let urlToken = `${Configuracion.urlCrearToken}?${Configuracion.nombreArg}=${datosUser.nombre}&${Configuracion.idUserArg}=${datosUserxRol.id_usuario}&${Configuracion.idRolArg}=${datosUserxRol.id_rol}`
+    let tk = "";
+    //console.log(tk);
+    await fetch(urlToken)
+      .then(async (res: any) => {
+        tk = await res.text();
       })
-    return token;
-  } */
+    //console.log(tk);
+    return tk;
+  }
 
 
 }
