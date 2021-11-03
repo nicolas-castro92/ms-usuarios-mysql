@@ -1,3 +1,4 @@
+import {authenticate} from '@loopback/authentication';
 import {service} from '@loopback/core';
 import {
   Count,
@@ -22,6 +23,7 @@ import {AdmiDeClavesService} from '../services';
 import {NotificacionesService} from '../services/notificaciones.service';
 import {UsuariosService} from '../services/usuarios.service';
 
+
 export class UsuarioController {
   constructor(
     @repository(UsuarioRepository)
@@ -39,7 +41,7 @@ export class UsuarioController {
 
   ////////////// CREAR USUARIO ///////////////////////////////////////////
 
-
+  @authenticate("administrador")
   @post('/usuarios')
   @response(200, {
     description: 'Usuario model instance',
@@ -125,6 +127,7 @@ export class UsuarioController {
         tk = await this.userService.crearToken(usuario, usuarioxrol);
         //console.log('aqui viene un token', tk);
       }
+      //return {usuarioxrol};
     }
     //console.log('que veo', tk);
     return {usuario, tk};

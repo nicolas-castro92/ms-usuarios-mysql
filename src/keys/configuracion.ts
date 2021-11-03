@@ -2,9 +2,10 @@
 export namespace Configuracion {
 
   //url
-  export const urlCorreo = "http://localhost:5000/correo"
-  export const urlSms = "http://localhost:5000/sms"
-  export const urlCrearToken = "http://localhost:5001/crear-token"
+  export const urlCorreo = "http://localhost:5000/correo";
+  export const urlSms = "http://localhost:5000/sms";
+  export const urlCrearToken = "http://localhost:5001/crear-token";
+  export const urlValidarToken = "http://localhost:5001/validar-token";
 
   //hash
   export const hashNotificacion = "123"
@@ -29,7 +30,12 @@ export namespace Configuracion {
   export const nombreArg = "nombre";
   export const idUserArg = "id_usuario";
   export const idRolArg = "id_rol"
+  export const tokenArg = "token"
+  export const rolArg = "rol"
 
+
+  //roles
+  export const rolAdministrador = 1;
 
 
 }
