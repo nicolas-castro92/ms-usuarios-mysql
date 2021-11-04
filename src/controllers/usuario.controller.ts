@@ -94,7 +94,6 @@ export class UsuarioController {
   /**
    * Metodos adicionales a los generados por loopback
    */
-
   @post('/identificar-usuario')
   @response(200, {
     description: 'Identificacion de usuarios',
@@ -187,7 +186,6 @@ export class UsuarioController {
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 
   @get('/usuarios/count')

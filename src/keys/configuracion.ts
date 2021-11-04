@@ -36,6 +36,6 @@ export namespace Configuracion {
 
   //roles
   export const rolAdministrador = 1;
-
+  export const rolSecretaria = 2;
 
 }

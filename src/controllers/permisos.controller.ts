@@ -1,21 +1,16 @@
+import {authenticate} from '@loopback/authentication';
 import {
   Count,
   CountSchema,
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
-  post,
-  param,
-  get,
-  getModelSchemaRef,
-  patch,
-  put,
-  del,
-  requestBody,
-  response,
+  del, get,
+  getModelSchemaRef, param, patch, post, put, requestBody,
+  response
 } from '@loopback/rest';
 import {Permisos} from '../models';
 import {PermisosRepository} from '../repositories';
@@ -23,8 +18,9 @@ import {PermisosRepository} from '../repositories';
 export class PermisosController {
   constructor(
     @repository(PermisosRepository)
-    public permisosRepository : PermisosRepository,
-  ) {}
+    public permisosRepository: PermisosRepository,
+  ) { }
+
 
   @post('/permisos')
   @response(200, {
@@ -58,6 +54,7 @@ export class PermisosController {
     return this.permisosRepository.count(where);
   }
 
+  @authenticate("secretaria")
   @get('/permisos')
   @response(200, {
     description: 'Array of Permisos model instances',
