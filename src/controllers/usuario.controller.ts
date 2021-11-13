@@ -125,11 +125,18 @@ export class UsuarioController {
         //usuario.contrasenia = "";
         tk = await this.userService.crearToken(usuario, usuarioxrol);
         //console.log('aqui viene un token', tk);
+        return {
+          OK: true,
+          tk, usuario
+        }
       }
       //return {usuarioxrol};
     }
     //console.log('que veo', tk);
-    return {usuario, tk};
+    return {
+      OK: false,
+      tk, usuario
+    };
   }
 
   @post('/cambiar-clave')
