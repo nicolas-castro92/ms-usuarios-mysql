@@ -110,7 +110,7 @@ export class UsuarioController {
       },
     })
     credenciales: Credenciales,
-  ): Promise<object | null> {
+  ): Promise<object | null | void> {
     let usuario = await this.userService.validarCredenciales(credenciales)
     let tk = "";
     if (usuario) {
@@ -132,7 +132,7 @@ export class UsuarioController {
           tk, usuario
         }
       } else {
-        throw new HttpErrors.UnprocessableEntity('password invalido');
+        throw new HttpErrors[400]('password invalido');
       }
       //return {usuarioxrol};
     }
@@ -141,9 +141,15 @@ export class UsuarioController {
       ok: false,
       mensaje: "password invalido"
     }; */
-    else {
-      throw new HttpErrors.UnprocessableEntity('password invalido');
-    }
+    /* else {
+      //throw new Error(`no existe el usuario ${credenciales.usuario}`)
+      if (credenciales.usuario ) {
+        throw new HttpErrors[400](`no existe el usuario ${credenciales.usuario}`);
+      } else if (credenciales.clave) {
+        throw new HttpErrors[400](`no existe el usuario ${credenciales.clave}`);
+      }
+
+    } */
   }
 
   @post('/cambiar-clave')

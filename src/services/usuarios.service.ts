@@ -1,5 +1,6 @@
 import { /* inject, */ BindingScope, injectable} from '@loopback/core';
 import {repository} from '@loopback/repository';
+import {HttpErrors} from '@loopback/rest';
 import {Configuracion} from '../keys/configuracion';
 import {Credenciales} from '../models/credenciales.model';
 import {Usuario} from '../models/usuario.model';
@@ -20,12 +21,16 @@ export class UsuariosService {
 
 
   async validarCredenciales(credenciales: Credenciales) {
+
     let usuario = await this.UsuarioRepository.findOne({
       where: {
         correo: credenciales.usuario,
         contrasenia: credenciales.clave
       }
     });
+    if (usuario?.correo != credenciales.usuario) {
+      throw new HttpErrors[400](`usuario o clave invalida revise nuevamente`);
+    }
     return usuario;
   }
 
