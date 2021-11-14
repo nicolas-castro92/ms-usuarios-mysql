@@ -10,7 +10,7 @@ import {
 } from '@loopback/repository';
 import {
   del, get,
-  getModelSchemaRef, param, patch, post, put, requestBody,
+  getModelSchemaRef, HttpErrors, param, patch, post, put, requestBody,
   response
 } from '@loopback/rest';
 import {Configuracion} from '../keys/configuracion';
@@ -125,18 +125,25 @@ export class UsuarioController {
         //usuario.contrasenia = "";
         tk = await this.userService.crearToken(usuario, usuarioxrol);
         //console.log('aqui viene un token', tk);
+        usuario.contrasenia = "";
+
         return {
-          OK: true,
+          ok: true,
           tk, usuario
         }
+      } else {
+        throw new HttpErrors.UnprocessableEntity('password invalido');
       }
       //return {usuarioxrol};
     }
     //console.log('que veo', tk);
-    return {
-      OK: false,
-      tk, usuario
-    };
+    /* return {
+      ok: false,
+      mensaje: "password invalido"
+    }; */
+    else {
+      throw new HttpErrors.UnprocessableEntity('password invalido');
+    }
   }
 
   @post('/cambiar-clave')

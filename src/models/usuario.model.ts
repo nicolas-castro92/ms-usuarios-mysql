@@ -27,6 +27,7 @@ export class Usuario extends Entity {
     required: false
   })
   contrasenia?: string;
+  "hiden": ["contrasenia"];
 
   @property({
     type: 'string',
