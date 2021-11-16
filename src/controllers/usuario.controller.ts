@@ -129,7 +129,7 @@ export class UsuarioController {
 
         return {
           ok: true,
-          tk, usuario
+          tk, usuario, usuarioxrol
         }
       } else {
         throw new HttpErrors[400]('password invalido');
@@ -196,13 +196,16 @@ export class UsuarioController {
       },
     })
     credenciales: CredencialesRecuperarClave,
-  ): Promise<Usuario | null | boolean> {
+  ): Promise<object | null | boolean> {
     let usuario = await this.adminDeClavesService.recuperarClave(credenciales);
     if (usuario) {
       //invocar al servicio de notificaciones para enviar sms al user con la nueva clave
-      return true;
+      return {
+        ok: true
+      }
+    } else {
+      throw new HttpErrors[400](`el usuario ${credenciales.correo} no existe, verifique nuevamente`);
     }
-    return usuario;
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -219,6 +222,7 @@ export class UsuarioController {
     return this.usuarioRepository.count(where);
   }
 
+  @authenticate("secretaria", "administrador")
   @get('/usuarios')
   @response(200, {
     description: 'Array of Usuario model instances',

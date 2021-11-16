@@ -18,7 +18,7 @@ export class EstrategiaAdministrador implements AuthenticationStrategy {
     console.log('parseBearer' + tk);
     if (tk) {
       //validarlo
-      console.log('es valido?' + tk);
+      //console.log('es valido?' + tk);
       let rolAdmin = Configuracion.rolAdministrador;
       let urlToken = `${Configuracion.urlValidarToken}?${Configuracion.tokenArg}=${tk}&${Configuracion.rolArg}=${rolAdmin}`
       console.log(urlToken);
@@ -26,8 +26,8 @@ export class EstrategiaAdministrador implements AuthenticationStrategy {
       await fetch(urlToken)
         .then(async (res: any) => {
           let respuestaa = await res.text();
-          console.log(respuesta);
-          console.log('respuesta del fetch' + respuesta);
+          //console.log(respuesta);
+          //console.log('respuesta del fetch' + respuesta);
           respuesta = respuestaa;
         })
       console.log("respuesta antes del switch" + respuesta);

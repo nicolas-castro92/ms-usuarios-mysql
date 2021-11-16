@@ -38,8 +38,6 @@ export class AdmiDeClavesService {
       datos.mensaje = `${Configuracion.saludo} ${usuario.nombre} ${Configuracion.mensajeRecuperarClave} ${claveRecuperada} `
       this.notiService.NotificacionSms(datos);
       return usuario
-    } else {
-      return null;
     }
   }
 
