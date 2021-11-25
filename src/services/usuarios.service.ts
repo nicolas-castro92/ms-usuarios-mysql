@@ -3,6 +3,7 @@ import {repository} from '@loopback/repository';
 import {HttpErrors} from '@loopback/rest';
 import {Configuracion} from '../keys/configuracion';
 import {Credenciales} from '../models/credenciales.model';
+import {TokenSession} from '../models/token-session.model';
 import {Usuario} from '../models/usuario.model';
 import {Usuarioxrol} from '../models/usuarioxrol.model';
 import {UsuarioRepository} from '../repositories/usuario.repository';
@@ -45,6 +46,18 @@ export class UsuariosService {
       })
     //console.log(tk);
     return tk;
+  }
+
+  async validarToken(token: TokenSession): Promise<Object> {
+    let ok = false;
+    console.log('desde validartoken', token.token);
+    let urlTokenSession = `${Configuracion.urlValidarSession}?${Configuracion.tokenArg}=${token.token}`
+    const resp = await fetch(urlTokenSession);
+    const data = await resp.json();
+    return {
+      ok: true,
+      data
+    };
   }
 
 

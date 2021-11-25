@@ -6,6 +6,7 @@ export namespace Configuracion {
   export const urlSms = "http://localhost:5000/sms";
   export const urlCrearToken = "http://localhost:5001/crear-token";
   export const urlValidarToken = "http://localhost:5001/validar-token";
+  export const urlValidarSession = "http://localhost:5001/validar-session"
 
   //hash
   export const hashNotificacion = "123"

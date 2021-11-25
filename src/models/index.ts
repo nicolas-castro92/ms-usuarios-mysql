@@ -9,3 +9,5 @@ export * from './notificacion-correo.model';
 export * from './credenciales-recuperar-clave.model';
 export * from './notificacion-sms.model';
 export * from './respuesta-token.model';
+export * from './token-session.model';
+export * from './payload.model';

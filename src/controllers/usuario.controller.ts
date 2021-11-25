@@ -17,6 +17,7 @@ import {Configuracion} from '../keys/configuracion';
 import {CambioClave, Credenciales, Usuario} from '../models';
 import {CredencialesRecuperarClave} from '../models/credenciales-recuperar-clave.model';
 import {NotificacionCorreo} from '../models/notificacion-correo.model';
+import {TokenSession} from '../models/token-session.model';
 import {UsuarioRepository} from '../repositories';
 import {UsuarioxrolRepository} from '../repositories/usuarioxrol.repository';
 import {AdmiDeClavesService} from '../services';
@@ -207,6 +208,34 @@ export class UsuarioController {
       throw new HttpErrors[400](`el usuario ${credenciales.correo} no existe, verifique nuevamente`);
     }
   }
+
+  @post('/validacion')
+  @response(200, {
+    description: 'Validacion de token',
+    content: {'application/json': {schema: getModelSchemaRef(TokenSession)}},
+  })
+  async validarToken(
+    @requestBody({
+      content: {
+        'application/json': {
+          schema: getModelSchemaRef(TokenSession, {
+            title: 'validar usuario'
+          }),
+        },
+      },
+    })
+    token: TokenSession,
+  ): Promise<object | null | void> {
+    let hayToken = await this.userService.validarToken(token)
+    if (hayToken) {
+      return hayToken;
+    } else {
+      throw new HttpErrors[400](`token invalido`);
+    }
+  }
+
+
+
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

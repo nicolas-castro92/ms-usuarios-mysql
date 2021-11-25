@@ -32,7 +32,7 @@ export class EstrategiaAdministrador implements AuthenticationStrategy {
         })
       console.log("respuesta antes del switch" + respuesta);
       switch (respuesta) {
-        case "2":
+        case "OK":
           let perfil: UserProfile = Object.assign({
             administrador: "OK"
           });
