@@ -50,14 +50,19 @@ export class UsuariosService {
 
   async validarToken(token: TokenSession): Promise<Object> {
     let ok = false;
-    console.log('desde validartoken', token.token);
-    let urlTokenSession = `${Configuracion.urlValidarSession}?${Configuracion.tokenArg}=${token.token}`
-    const resp = await fetch(urlTokenSession);
-    const data = await resp.json();
-    return {
-      ok: true,
-      data
-    };
+    //console.log('desde validartoken', token.token);
+    try {
+      let urlTokenSession = `${Configuracion.urlValidarSession}?${Configuracion.tokenArg}=${token.token}`
+      const resp = await fetch(urlTokenSession);
+      const data = await resp.json();
+      return {
+        ok: true,
+        data, token
+      }
+
+    } catch (err) {
+      throw new HttpErrors[401](`unauthorized`);
+    }
   }
 
 

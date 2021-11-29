@@ -226,6 +226,10 @@ export class UsuarioController {
     })
     token: TokenSession,
   ): Promise<object | null | void> {
+    console.log('aqui llega', token);
+    if (token == null) {
+      throw new HttpErrors[401](`unauthorized`);
+    }
     let hayToken = await this.userService.validarToken(token)
     if (hayToken) {
       return hayToken;
@@ -323,6 +327,7 @@ export class UsuarioController {
     await this.usuarioRepository.updateById(id, usuario);
   }
 
+  @authenticate("administrador")
   @put('/usuarios/{id}')
   @response(204, {
     description: 'Usuario PUT success',
@@ -333,6 +338,7 @@ export class UsuarioController {
   ): Promise<void> {
     await this.usuarioRepository.replaceById(id, usuario);
   }
+
 
   @del('/usuarios/{id}')
   @response(204, {
