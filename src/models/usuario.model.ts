@@ -24,10 +24,10 @@ export class Usuario extends Entity {
 
   @property({
     type: 'string',
-    required: false
+    required: false,
+    hidden: true
   })
   contrasenia?: string;
-  "hiden": ["contrasenia"];
 
   @property({
     type: 'string',
