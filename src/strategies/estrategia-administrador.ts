@@ -15,13 +15,13 @@ export class EstrategiaAdministrador implements AuthenticationStrategy {
 
   async authenticate(request: Request): Promise<UserProfile | undefined> {
     let tk = parseBearerToken(request);
-    console.log('parseBearer' + tk);
+    //console.log('parseBearer' + tk);
     if (tk) {
       //validarlo
       //console.log('es valido?' + tk);
       let rolAdmin = Configuracion.rolAdministrador;
       let urlToken = `${Configuracion.urlValidarToken}?${Configuracion.tokenArg}=${tk}&${Configuracion.rolArg}=${rolAdmin}`
-      console.log(urlToken);
+      //console.log(urlToken);
       let respuesta = "";
       await fetch(urlToken)
         .then(async (res: any) => {
@@ -30,7 +30,7 @@ export class EstrategiaAdministrador implements AuthenticationStrategy {
           //console.log('respuesta del fetch' + respuesta);
           respuesta = respuestaa;
         })
-      console.log("respuesta antes del switch" + respuesta);
+      //console.log("respuesta antes del switch" + respuesta);
       switch (respuesta) {
         case "OK":
           let perfil: UserProfile = Object.assign({

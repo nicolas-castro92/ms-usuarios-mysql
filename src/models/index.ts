@@ -11,3 +11,5 @@ export * from './notificacion-sms.model';
 export * from './respuesta-token.model';
 export * from './token-session.model';
 export * from './payload.model';
+export * from './correos.model';
+export * from './test.model';

@@ -12,3 +12,4 @@ export * from './usuario.controller';
 export * from './permisos.controller';
 export * from './usuarioxrol.controller';
 export * from './rolxpermisos.controller';
+export * from './test.controller';

@@ -20,6 +20,44 @@ export class UsuarioxrolController {
     public usuarioxrolRepository: UsuarioxrolRepository,
   ) { }
 
+  @get('/secretariaa')
+  @response(200, {
+    description: 'Array of Usuarioxrol model instances',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'array',
+          items: getModelSchemaRef(Usuarioxrol, {includeRelations: true}),
+        },
+      },
+    },
+  })
+  async secre(
+    @param.filter(Usuarioxrol) filter?: Filter<Usuarioxrol>,
+  ): Promise<Usuarioxrol[]> {
+    return this.usuarioxrolRepository.find({
+      include: [
+        {
+          relation: "tiene_un",
+          scope: {
+            fields: {
+              estado: true
+            }
+          }
+        }
+      ]
+    });
+  }
+
+  /* where: {
+        id_rol: 3
+      } */
+
+  /* include: [{relation: "tiene_un"}] */
+  //////////////////////////////////////////////////////
+
+
+
   @post('/usuarioxroles')
   @response(200, {
     description: 'Usuarioxrol model instance',

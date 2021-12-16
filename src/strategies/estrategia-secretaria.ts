@@ -15,18 +15,18 @@ export class EstrategiaSecretaria implements AuthenticationStrategy {
 
   async authenticate(request: Request): Promise<UserProfile | undefined> {
     let tk = parseBearerToken(request);
-    console.log('parseBearer' + tk);
+    //console.log('parseBearer' + tk);
     if (tk) {
       //validarlo
       console.log('es valido?' + tk);
       let rolSecretaria = Configuracion.rolSecretaria;
       let urlToken = `${Configuracion.urlValidarToken}?${Configuracion.tokenArg}=${tk}&${Configuracion.rolArg}=${rolSecretaria}`
-      console.log(urlToken);
+      //console.log(urlToken);
       let respuesta = "";
       await fetch(urlToken)
         .then(async (res: any) => {
           let respuestaa = await res.text();
-          console.log(respuesta);
+          //console.log(respuesta);
           //console.log('respuesta del fetch' + respuesta);
           respuesta = respuestaa;
         })

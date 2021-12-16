@@ -44,6 +44,7 @@ export class RolUsuarioxrolController {
   ): Promise<Usuarioxrol[]> {
     return this.rolRepository.tiene_muchos(id).find(filter);
   }
+  
 
   @post('/rols/{id}/usuarioxrols', {
     responses: {

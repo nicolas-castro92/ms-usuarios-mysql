@@ -4,8 +4,7 @@ import {
   Count,
   CountSchema,
   Filter,
-  FilterExcludingWhere,
-  repository,
+  FilterExcludingWhere, repository,
   Where
 } from '@loopback/repository';
 import {
@@ -14,7 +13,7 @@ import {
   response
 } from '@loopback/rest';
 import {Configuracion} from '../keys/configuracion';
-import {CambioClave, Credenciales, Usuario} from '../models';
+import {CambioClave, Credenciales, Usuario, Usuarioxrol} from '../models';
 import {CredencialesRecuperarClave} from '../models/credenciales-recuperar-clave.model';
 import {NotificacionCorreo} from '../models/notificacion-correo.model';
 import {TokenSession} from '../models/token-session.model';
@@ -36,7 +35,7 @@ export class UsuarioController {
     @service(UsuariosService)
     public userService: UsuariosService,
     @repository(UsuarioxrolRepository)
-    public userxRolRepository: UsuarioxrolRepository,
+    public userxRolRepository: UsuarioxrolRepository
 
   ) { }
 
@@ -49,6 +48,7 @@ export class UsuarioController {
     content: {'application/json': {schema: getModelSchemaRef(Usuario)}},
   })
   async create(
+
     @requestBody({
       content: {
         'application/json': {
@@ -59,7 +59,7 @@ export class UsuarioController {
         },
       },
     })
-    usuario: Omit<Usuario, 'id'>,
+    usuario: Omit<Usuario, 'id'>
   ): Promise<Usuario | boolean | string> {
     let clave = this.adminDeClavesService.crearClaveAleatoria();
     //console.log(clave);
@@ -74,6 +74,7 @@ export class UsuarioController {
     })
     if (!usuarioVerificado) {
       let usuarioCreado = await this.usuarioRepository.create(usuario);
+
       if (usuarioCreado) {
         // enviar clave por correo electronico
         let datos = new NotificacionCorreo();
@@ -84,8 +85,15 @@ export class UsuarioController {
                        ${Configuracion.mensajeUsuarioCreado}
                        ${Configuracion.mensajeUsuarioCreadoClave}
                        ${clave}`
+
+
+
+        /* await this.userxRolRepository.create(new Usuarioxrol({
+          id_usuario: usuarioCreado.id,
+          id_rol: idRol
+        })) */
         this.notiService.enviarCorreo(datos);
-        return true
+        return usuarioCreado;
       }
       return usuarioCreado;
     }
@@ -241,6 +249,34 @@ export class UsuarioController {
 
 
 
+  @get('/administradores')
+  @response(200, {
+    description: 'Array of Usuario model instances',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'array',
+          items: getModelSchemaRef(Usuario, {includeRelations: true}),
+        },
+      },
+    },
+  })
+  async buscarS(
+    @param.filter(Usuario) filter?: Filter<Usuario | Usuarioxrol>,
+  ): Promise<Usuario[]> {
+    return this.usuarioRepository.find({
+      fields: {
+        "correo": true
+      },
+      include: [
+        {
+          relation: "tiene_muchos"
+        }
+      ]
+    });
+  }
+
+
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -255,7 +291,7 @@ export class UsuarioController {
     return this.usuarioRepository.count(where);
   }
 
-  @authenticate("secretaria", "administrador")
+  /*  @authenticate("secretaria", "administrador") */
   @get('/usuarios')
   @response(200, {
     description: 'Array of Usuario model instances',
@@ -271,7 +307,11 @@ export class UsuarioController {
   async find(
     @param.filter(Usuario) filter?: Filter<Usuario>,
   ): Promise<Usuario[]> {
-    return this.usuarioRepository.find(filter);
+    return this.usuarioRepository.find({
+      include: [
+        {relation: 'tiene_muchos', scope: {include: [{relation: "pertenece_a"}]}},
+      ]
+    });
   }
 
   @patch('/usuarios')

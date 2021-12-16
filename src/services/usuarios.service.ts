@@ -13,7 +13,7 @@ const fetch = require('node-fetch');
 export class UsuariosService {
   constructor(
     @repository(UsuarioRepository)
-    public UsuarioRepository: UsuarioRepository
+    public UsuarioRepository: UsuarioRepository,
   ) { }
 
   /*
